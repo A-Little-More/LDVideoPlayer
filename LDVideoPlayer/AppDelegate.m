@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "BaseTabBarController.h"
 
 @interface AppDelegate ()
 
@@ -16,10 +17,72 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    self.window.rootViewController = [[BaseTabBarController alloc]init];
+    
+    [self.window makeKeyAndVisible];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(DeviceOrientationDidChange) name:UIDeviceOrientationDidChangeNotification object:nil];
+//    
+//    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    
     return YES;
 }
 
+//- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window{
+//    
+//    return UIInterfaceOrientationMaskAll;
+//    
+//}
+
+//- (BOOL)DeviceOrientationDidChange{
+//
+//    UIDevice *device = [UIDevice currentDevice];
+//
+//    //识别当前设备的旋转方向
+//    switch (device.orientation) {
+//        case UIDeviceOrientationFaceUp:
+//            NSLog(@"屏幕幕朝上平躺");
+//            break;
+//
+//        case UIDeviceOrientationFaceDown:
+//            NSLog(@"屏幕朝下平躺");
+//            break;
+//        case UIDeviceOrientationUnknown:
+//            //系统当前无法识别设备朝向，可能是倾斜
+//            NSLog(@"未知方向");
+//            break;
+//
+//        case UIDeviceOrientationLandscapeLeft:
+//            [UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+//            NSLog(@"屏幕向左橫置");
+//            break;
+//
+//        case UIDeviceOrientationLandscapeRight:
+//            NSLog(@"屏幕向右橫置");
+//            [UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeLeft;
+//            break;
+//
+//        case UIDeviceOrientationPortrait:
+//            [UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationPortrait;
+//            NSLog(@"屏幕直立");
+//            break;
+//
+//        case UIDeviceOrientationPortraitUpsideDown:
+//            NSLog(@"屏幕直立，上下顛倒");
+//            break;
+//
+//        default:
+//            NSLog(@"無法识别");
+//            break;
+//    }
+//
+//    return YES;
+//}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

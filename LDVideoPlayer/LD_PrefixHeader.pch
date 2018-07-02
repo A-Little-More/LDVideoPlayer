@@ -1,0 +1,30 @@
+//
+//  LD_PrefixHeader.pch
+//  LDVideoPlayer
+//
+//  Created by lidong on 2018/6/26.
+//  Copyright © 2018年 macbook. All rights reserved.
+//
+
+#ifndef LD_PrefixHeader_pch
+#define LD_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <ReactiveObjC/ReactiveObjC.h>
+#import <KVOController/KVOController.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <Masonry/Masonry.h>
+#import <MBProgressHUD/MBProgressHUD.h>
+#import <AFNetworking/AFNetworking.h>
+#import <SJFullscreenPopGesture/UINavigationController+SJVideoPlayerAdd.h>
+#import <SJFullscreenPopGesture/UIViewController+SJVideoPlayerAdd.h>
+
+#define videoUrl @"http://download.3g.joy.cn/video/236/60236937/1451280942752_hd.mp4"
+
+#define kScreenWidth ([UIScreen mainScreen].bounds.size.width)
+#define kScreenHeight ([UIScreen mainScreen].bounds.size.height)
+#define LDSystemVersion ([[[UIDevice currentDevice] systemVersion] floatValue])
+
+#endif /* LD_PrefixHeader_pch */
