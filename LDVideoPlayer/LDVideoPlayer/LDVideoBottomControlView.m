@@ -9,7 +9,7 @@
 #import "LDVideoBottomControlView.h"
 #import "LDSlider.h"
 
-@interface LDVideoBottomControlView ()
+@interface LDVideoBottomControlView ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong)UIButton *playOrPauseBtn;
 
@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong)UISlider *bufferSlider;
 
-//@property (nonatomic, strong)UITapGestureRecognizer *progressTapGesture;
+@property (nonatomic, strong)UITapGestureRecognizer *progressTapGesture;
 
 @property (nonatomic, strong)UIButton *fullScreenBtn;
 
@@ -28,6 +28,9 @@
 
 //视频的当前时间 格式00:10
 @property (nonatomic, copy, readwrite)NSString *currentSecondTime;
+
+//
+@property (nonatomic, strong)UITapGestureRecognizer *tapGesture;
 
 @end
 
@@ -54,6 +57,11 @@
     [self addSubview:self.playOrPauseBtn];
     [self addSubview:self.fullScreenBtn];
     
+//    self.playTimeLabel.hidden = YES;
+//    self.bufferSlider.hidden = YES;
+//    self.progressSlider.hidden = YES;
+//    self.playOrPauseBtn.hidden = YES;
+//    self.fullScreenBtn.hidden = YES;
     
     [self.playOrPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {
       
@@ -94,6 +102,12 @@
         
     }];
     
+    [self addGestureRecognizer:self.tapGesture];
+    
+}
+
+- (void)tapGestureAction:(UIGestureRecognizer *)gesture{
+    
     
 }
 
@@ -125,24 +139,24 @@
     
 }
 
-//#pragma mark - progressTapGesture -- progressSlider的点击事件
-//
-//- (void)progressTapGesture:(UIGestureRecognizer *)gesture{
-//    
-//    CGPoint point = [gesture locationInView:self.progressSlider];
-//    CGFloat pointX = point.x;
-//    CGFloat sliderWith = self.progressSlider.frame.size.width;
-//    CGFloat currentValue = pointX / sliderWith * self.progressSlider.maximumValue;
-//    
-//    if([self.delegate respondsToSelector:@selector(controlView:positionSliderLocationWithCurrentValue:)]){
-//        
+#pragma mark - progressTapGesture -- progressSlider的点击事件
+
+- (void)progressTapGesture:(UIGestureRecognizer *)gesture{
+    
+    CGPoint point = [gesture locationInView:self.progressSlider];
+    CGFloat pointX = point.x;
+    CGFloat sliderWith = self.progressSlider.frame.size.width;
+    CGFloat currentValue = pointX / sliderWith * self.progressSlider.maximumValue;
+    
+    if([self.delegate respondsToSelector:@selector(controlView:positionSliderLocationWithCurrentValue:)]){
+        
 //        self.currentSecond = currentValue;
-//        
-//        [self.delegate controlView:self positionSliderLocationWithCurrentValue:currentValue];
-//        
-//    }
-//    
-//}
+        
+        [self.delegate controlView:self positionSliderLocationWithCurrentValue:currentValue];
+        
+    }
+    
+}
 
 #pragma mark - fullScreenBtnPress-- 最大化/最小化
 
@@ -289,7 +303,7 @@
         
         [_progressSlider addTarget:self action:@selector(progressSliderTouchUpInside:) forControlEvents:UIControlEventTouchUpOutside];
         
-//        [_progressSlider addGestureRecognizer:self.progressTapGesture];
+        [_progressSlider addGestureRecognizer:self.progressTapGesture];
         
     }
     
@@ -319,18 +333,18 @@
     return _bufferSlider;
 }
 
-//- (UITapGestureRecognizer *)progressTapGesture{
-//
-//    if(!_progressTapGesture){
-//
-//        _progressTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(progressTapGesture:)];
-//
-//        _progressTapGesture.delegate = self;
-//
-//    }
-//
-//    return _progressTapGesture;
-//}
+- (UITapGestureRecognizer *)progressTapGesture{
+
+    if(!_progressTapGesture){
+
+        _progressTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(progressTapGesture:)];
+
+        _progressTapGesture.delegate = self;
+
+    }
+
+    return _progressTapGesture;
+}
 
 - (UIButton *)fullScreenBtn{
     
@@ -363,6 +377,19 @@
     }
     
     return _playTimeLabel;
+}
+
+- (UITapGestureRecognizer *)tapGesture{
+    
+    if(!_tapGesture){
+        
+        _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureAction:)];
+        
+        _tapGesture.delegate = self;
+        
+    }
+    
+    return _tapGesture;
 }
 
 @end

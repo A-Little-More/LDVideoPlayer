@@ -11,6 +11,14 @@
 		FA3D4D3020E74A9D00E18877 /* VideoPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D2F20E74A9D00E18877 /* VideoPlayViewController.m */; };
 		FA3D4D3320E9EC2300E18877 /* LDBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D3220E9EC2300E18877 /* LDBrightnessView.m */; };
 		FA3D4D3620E9F87A00E18877 /* LDVideoTopControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D3520E9F87A00E18877 /* LDVideoTopControlView.m */; };
+		FA3D4D3C20EB1BED00E18877 /* VideoDataModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D3B20EB1BED00E18877 /* VideoDataModel.mm */; };
+		FA3D4D3E20EB1BFD00E18877 /* video01.json in Resources */ = {isa = PBXBuildFile; fileRef = FA3D4D3D20EB1BFD00E18877 /* video01.json */; };
+		FA3D4D4120EB1FB700E18877 /* VideoListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D4020EB1FB700E18877 /* VideoListTableViewCell.m */; };
+		FA3D4D4C20ECA6EF00E18877 /* DouYinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D4B20ECA6EF00E18877 /* DouYinViewController.m */; };
+		FA3D4D4F20ECAEF800E18877 /* LDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3D4D4E20ECAEF800E18877 /* LDImageView.m */; };
+		FAC1F43B20EDBFCA00D6C73B /* LDPlayerScrollManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC1F43A20EDBFCA00D6C73B /* LDPlayerScrollManager.m */; };
+		FAC1F43E20F2EE6900D6C73B /* LDPlayerTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC1F43D20F2EE6900D6C73B /* LDPlayerTableView.m */; };
+		FAC1F44120F2F8DB00D6C73B /* LDPlayerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC1F44020F2F8DB00D6C73B /* LDPlayerTableViewCell.m */; };
 		FAF0A71220E213310092188F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF0A71120E213310092188F /* AppDelegate.m */; };
 		FAF0A71520E213310092188F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF0A71420E213310092188F /* ViewController.m */; };
 		FAF0A71820E213310092188F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF0A71620E213310092188F /* Main.storyboard */; };
@@ -59,6 +67,21 @@
 		FA3D4D3220E9EC2300E18877 /* LDBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LDBrightnessView.m; sourceTree = "<group>"; };
 		FA3D4D3420E9F87A00E18877 /* LDVideoTopControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDVideoTopControlView.h; sourceTree = "<group>"; };
 		FA3D4D3520E9F87A00E18877 /* LDVideoTopControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LDVideoTopControlView.m; sourceTree = "<group>"; };
+		FA3D4D3A20EB1BEC00E18877 /* VideoDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDataModel.h; sourceTree = "<group>"; };
+		FA3D4D3B20EB1BED00E18877 /* VideoDataModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoDataModel.mm; sourceTree = "<group>"; };
+		FA3D4D3D20EB1BFD00E18877 /* video01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = video01.json; sourceTree = "<group>"; };
+		FA3D4D3F20EB1FB700E18877 /* VideoListTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoListTableViewCell.h; sourceTree = "<group>"; };
+		FA3D4D4020EB1FB700E18877 /* VideoListTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoListTableViewCell.m; sourceTree = "<group>"; };
+		FA3D4D4A20ECA6EF00E18877 /* DouYinViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DouYinViewController.h; sourceTree = "<group>"; };
+		FA3D4D4B20ECA6EF00E18877 /* DouYinViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DouYinViewController.m; sourceTree = "<group>"; };
+		FA3D4D4D20ECAEF800E18877 /* LDImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDImageView.h; sourceTree = "<group>"; };
+		FA3D4D4E20ECAEF800E18877 /* LDImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LDImageView.m; sourceTree = "<group>"; };
+		FAC1F43920EDBFCA00D6C73B /* LDPlayerScrollManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDPlayerScrollManager.h; sourceTree = "<group>"; };
+		FAC1F43A20EDBFCA00D6C73B /* LDPlayerScrollManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LDPlayerScrollManager.m; sourceTree = "<group>"; };
+		FAC1F43C20F2EE6900D6C73B /* LDPlayerTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDPlayerTableView.h; sourceTree = "<group>"; };
+		FAC1F43D20F2EE6900D6C73B /* LDPlayerTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LDPlayerTableView.m; sourceTree = "<group>"; };
+		FAC1F43F20F2F8DB00D6C73B /* LDPlayerTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LDPlayerTableViewCell.h; sourceTree = "<group>"; };
+		FAC1F44020F2F8DB00D6C73B /* LDPlayerTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LDPlayerTableViewCell.m; sourceTree = "<group>"; };
 		FAF0A70D20E213310092188F /* LDVideoPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LDVideoPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF0A71020E213310092188F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FAF0A71120E213310092188F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -143,6 +166,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FA3D4D3720EB1BC200E18877 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FA3D4D3A20EB1BEC00E18877 /* VideoDataModel.h */,
+				FA3D4D3B20EB1BED00E18877 /* VideoDataModel.mm */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FA3D4D3820EB1BCA00E18877 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FA3D4D3F20EB1FB700E18877 /* VideoListTableViewCell.h */,
+				FA3D4D4020EB1FB700E18877 /* VideoListTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FA3D4D3920EB1BCF00E18877 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FAF0A75020E223A70092188F /* ShopViewController.h */,
+				FAF0A75120E223A70092188F /* ShopViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		FAF0A70420E213310092188F = {
 			isa = PBXGroup;
 			children = (
@@ -174,7 +224,7 @@
 				FAF0A74E20E223870092188F /* Home */,
 				FAF0A74F20E223960092188F /* Shop */,
 				FAF0A75720E223C50092188F /* Mine */,
-				FAF0A75320E223B60092188F /* Car */,
+				FAF0A75320E223B60092188F /* douyin */,
 				FAF0A71320E213310092188F /* ViewController.h */,
 				FAF0A71420E213310092188F /* ViewController.m */,
 				FAF0A71620E213310092188F /* Main.storyboard */,
@@ -182,6 +232,7 @@
 				FAF0A71B20E213310092188F /* LaunchScreen.storyboard */,
 				FAF0A71E20E213310092188F /* Info.plist */,
 				FAF0A71F20E213310092188F /* main.m */,
+				FA3D4D3D20EB1BFD00E18877 /* video01.json */,
 				FAF0A74420E222210092188F /* BaseNavigationController */,
 				FAF0A74320E2220C0092188F /* BaseTabBarController */,
 				FAF0A74220E21DDE0092188F /* LD_PrefixHeader.pch */,
@@ -239,19 +290,22 @@
 		FAF0A74F20E223960092188F /* Shop */ = {
 			isa = PBXGroup;
 			children = (
-				FAF0A75020E223A70092188F /* ShopViewController.h */,
-				FAF0A75120E223A70092188F /* ShopViewController.m */,
+				FA3D4D3920EB1BCF00E18877 /* Controller */,
+				FA3D4D3820EB1BCA00E18877 /* View */,
+				FA3D4D3720EB1BC200E18877 /* Model */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
 		};
-		FAF0A75320E223B60092188F /* Car */ = {
+		FAF0A75320E223B60092188F /* douyin */ = {
 			isa = PBXGroup;
 			children = (
 				FAF0A75420E223C00092188F /* CarViewController.h */,
 				FAF0A75520E223C00092188F /* CarViewController.m */,
+				FA3D4D4A20ECA6EF00E18877 /* DouYinViewController.h */,
+				FA3D4D4B20ECA6EF00E18877 /* DouYinViewController.m */,
 			);
-			path = Car;
+			path = douyin;
 			sourceTree = "<group>";
 		};
 		FAF0A75720E223C50092188F /* Mine */ = {
@@ -268,6 +322,8 @@
 			children = (
 				FAF0A75C20E230240092188F /* LDVideoPlayerManager.h */,
 				FAF0A75D20E230240092188F /* LDVideoPlayerManager.m */,
+				FAC1F43920EDBFCA00D6C73B /* LDPlayerScrollManager.h */,
+				FAC1F43A20EDBFCA00D6C73B /* LDPlayerScrollManager.m */,
 				FAF0A75F20E230430092188F /* LDVideoPlayerView.h */,
 				FAF0A76020E230430092188F /* LDVideoPlayerView.m */,
 				FA3D4D3420E9F87A00E18877 /* LDVideoTopControlView.h */,
@@ -280,6 +336,12 @@
 				FAF0A76C20E61B0D0092188F /* LDVideoPresentView.m */,
 				FA3D4D3120E9EC2300E18877 /* LDBrightnessView.h */,
 				FA3D4D3220E9EC2300E18877 /* LDBrightnessView.m */,
+				FAC1F43C20F2EE6900D6C73B /* LDPlayerTableView.h */,
+				FAC1F43D20F2EE6900D6C73B /* LDPlayerTableView.m */,
+				FAC1F43F20F2F8DB00D6C73B /* LDPlayerTableViewCell.h */,
+				FAC1F44020F2F8DB00D6C73B /* LDPlayerTableViewCell.m */,
+				FA3D4D4D20ECAEF800E18877 /* LDImageView.h */,
+				FA3D4D4E20ECAEF800E18877 /* LDImageView.m */,
 			);
 			path = LDVideoPlayer;
 			sourceTree = "<group>";
@@ -392,6 +454,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA3D4D3E20EB1BFD00E18877 /* video01.json in Resources */,
 				FAF0A71D20E213310092188F /* LaunchScreen.storyboard in Resources */,
 				FAF0A71A20E213310092188F /* Assets.xcassets in Resources */,
 				FAF0A71820E213310092188F /* Main.storyboard in Resources */,
@@ -475,18 +538,25 @@
 				FA3D4D3020E74A9D00E18877 /* VideoPlayViewController.m in Sources */,
 				FAF0A71520E213310092188F /* ViewController.m in Sources */,
 				FAF0A72020E213310092188F /* main.m in Sources */,
+				FAC1F43E20F2EE6900D6C73B /* LDPlayerTableView.m in Sources */,
 				FAF0A76120E230430092188F /* LDVideoPlayerView.m in Sources */,
 				FAF0A76420E37B3A0092188F /* LDVideoBottomControlView.m in Sources */,
 				FA3D4D3620E9F87A00E18877 /* LDVideoTopControlView.m in Sources */,
 				FAF0A75A20E223D50092188F /* MineViewController.m in Sources */,
 				FAF0A75620E223C00092188F /* CarViewController.m in Sources */,
+				FA3D4D4C20ECA6EF00E18877 /* DouYinViewController.m in Sources */,
 				FAF0A71220E213310092188F /* AppDelegate.m in Sources */,
 				FAF0A74A20E222820092188F /* BaseNavigationController.m in Sources */,
 				FAF0A74D20E223730092188F /* HomeViewController.m in Sources */,
+				FAC1F43B20EDBFCA00D6C73B /* LDPlayerScrollManager.m in Sources */,
+				FAC1F44120F2F8DB00D6C73B /* LDPlayerTableViewCell.m in Sources */,
+				FA3D4D4120EB1FB700E18877 /* VideoListTableViewCell.m in Sources */,
 				FAF0A76A20E4E4E50092188F /* LDSlider.m in Sources */,
 				FAF0A76D20E61B0D0092188F /* LDVideoPresentView.m in Sources */,
 				FAF0A75220E223A70092188F /* ShopViewController.m in Sources */,
 				FA3D4D3320E9EC2300E18877 /* LDBrightnessView.m in Sources */,
+				FA3D4D4F20ECAEF800E18877 /* LDImageView.m in Sources */,
+				FA3D4D3C20EB1BED00E18877 /* VideoDataModel.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

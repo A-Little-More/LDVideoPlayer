@@ -23,6 +23,11 @@
 @interface LDVideoTopControlView : UIView
 
 /**
+ *  视频的标题
+ */
+@property (nonatomic, copy)NSString *title;
+
+/**
  *  是否一直显示返回键 0 只有在全屏的时候显示 1 小屏和全屏都显示
  */
 @property (nonatomic, assign)BOOL alwaysShowBackBtn;

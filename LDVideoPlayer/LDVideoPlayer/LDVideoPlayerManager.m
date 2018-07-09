@@ -17,7 +17,7 @@
 #import "LDVideoPresentView.h"
 #import "LDBrightnessView.h"
 
-@interface LDVideoPlayerManager ()<LDBottomControlViewDelegate, LDVideoTopControlViewDelegate>
+@interface LDVideoPlayerManager ()<LDBottomControlViewDelegate, LDVideoTopControlViewDelegate, UIGestureRecognizerDelegate>
 
 /**
  *  播放器视图
@@ -47,7 +47,7 @@
 /**
  *  视频的URL
  */
-@property (nonatomic, strong, readwrite)NSURL *videoURL;
+@property (nonatomic, strong, readwrite)NSURL *assetURL;
 
 /**
  *  播放状态
@@ -119,6 +119,16 @@
  */
 @property (nonatomic, strong, readwrite)UISlider *systemVolumeSlider;
 
+/**
+ *  播放器的类型
+ */
+@property (nonatomic, assign, readwrite)LDVideoPlayerStyle playerStyle;
+
+/**
+ *  短视频播放按钮
+ */
+@property (nonatomic, strong)UIImageView *shortVideoPlayImg;
+
 @end
 
 @implementation LDVideoPlayerManager{
@@ -133,17 +143,20 @@
     int _brightnessLastValue;//用于记录调节亮度的上次value
     NSInteger _controlViewCount;//控制层的倒计时计数  默认五秒
     BOOL _enterBackStatus;//进入后台之前的状态 0 暂停 1 播放
+    UITableView *_tableView;
+    NSIndexPath *_indexPath;
+    UIView *_parentView;
     
 }
 
 
-+ (instancetype)playerVideoUrl:(NSString *)url{
++ (instancetype)playerManager{
     
-    return [[self alloc]initWithUrl:url];
+    return [[self alloc]init];
     
 }
 
-- (instancetype)initWithUrl:(NSString *)url{
+- (instancetype)init{
     
     self = [super init];
     
@@ -155,18 +168,126 @@
         
         [self initControlView];
         
-        self.url = url;
-        
     }
     
     return self;
 }
 
+- (void)playWithTile:(NSString *)title avAssetUrl:(NSURL *)assetUrl{
+    
+    self.topControlView.title = title;
+    
+    //视频的URL
+    self.assetURL = assetUrl;
+    
+    if(self.assetURL){
+        
+        self.playerStyle = LDVideoPlayerNormalStyle;
+        
+        [self addNotificationForPlayer];
+        
+        [self setAsset];
+        
+        [self setPlayerItem];
+        
+        [self setAvPlayer];
+        
+        [self setAvPlayerLayer];
+        
+    }
+}
+
+- (void)playWithTitle:(NSString *)title avAssetUrl:(NSURL *)assetUrl scrollView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath playerParentView:(UIView *)parentView{
+    
+    _tableView = tableView;
+    _indexPath = indexPath;
+    _parentView = parentView;
+    self.view.hidden = NO;
+    
+    self.topControlView.title = title;
+    
+    if(self.view.superview){
+        
+        [self reset];
+        
+        [self.view removeFromSuperview];
+        
+    }
+    
+    [parentView addSubview:self.view];
+    
+    [self.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(parentView);
+    }];
+    
+    [self addTableViewVisibleRowObserve];
+    
+    //视频的URL
+    self.assetURL = assetUrl;
+    
+    if(self.assetURL){
+        
+        self.playerStyle = LDVideoPlayerTableViewStyle;
+        
+        [self addNotificationForPlayer];
+        
+        [self setAsset];
+        
+        [self setPlayerItem];
+        
+        [self setAvPlayer];
+        
+        [self setAvPlayerLayer];
+        
+    }
+    
+}
+
+- (void)playShortVideoStyleWithAvAssetUrl:(NSURL *)assetUrl playerParentView:(UIView *)parentView{
+    
+    self.topControlView.hidden = YES;
+    self.bottomControlView.hidden = YES;
+    
+    _parentView = parentView;
+    
+    if(self.view.superview){
+        
+        [self reset];
+        
+        [self.view removeFromSuperview];
+        
+    }
+    
+    [_parentView addSubview:self.view];
+    
+    [self.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(_parentView);
+    }];
+    
+    //视频的URL
+    self.assetURL = assetUrl;
+    
+    if(self.assetURL){
+        
+        self.playerStyle = LDVideoPlayerShortVideoStyle;
+        
+        [self addNotificationForPlayer];
+        
+        [self setAsset];
+        
+        [self setPlayerItem];
+        
+        [self setAvPlayer];
+        
+        [self setAvPlayerLayer];
+        
+    }
+    
+}
+
 - (void)bindData{
     
     _kvoCtr = [FBKVOController controllerWithObserver:self];
-    
-    [self addNotificationForPlayer];
     
     self.interfaceOrientation = UIInterfaceOrientationPortrait;
     
@@ -180,6 +301,7 @@
     [self.rotationView addSubview:self.bottomControlView];
     [self.rotationView addSubview:self.presentView];
     [self.rotationView addSubview:self.bottomSlider];
+    [self.rotationView addSubview:self.shortVideoPlayImg];
     
     [self.rotationView mas_makeConstraints:^(MASConstraintMaker *make) {
       
@@ -220,34 +342,18 @@
         
     }];
     
+    [self.shortVideoPlayImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(self.rotationView);
+        make.width.height.mas_equalTo(60);
+    }];
+    
     [self addControlViewTimer];
 }
 
-- (void)setUrl:(NSString *)url{
-    
-    _url = url;
-    
-    [self setVieoUrl];
-    
-    [self setAsset];
-    
-    [self setPlayerItem];
-
-    [self setAvPlayer];
-    
-    [self setAvPlayerLayer];
-    
-}
-
-- (void)setVieoUrl{
-    
-    self.videoURL = [NSURL URLWithString:self.url];
-    
-}
 
 - (void)setAsset{
     
-    self.avAsset = [AVAsset assetWithURL:self.videoURL];
+    self.avAsset = [AVAsset assetWithURL:self.assetURL];
  
     [self observeAvAsset];
 }
@@ -264,6 +370,8 @@
     
     self.avPlayer = [AVPlayer playerWithPlayerItem:self.avPlayerItem];
     
+    self.avPlayer.muted = _muted;
+    
     [self observeAvPlayer];
     
 }
@@ -275,6 +383,56 @@
     [self.playerView.layer addSublayer:self.avPlayerLayer];
     
     self.playerView.avPlayerLayer = self.avPlayerLayer;
+    
+}
+
+#pragma mark - addTableViewVisibleRowObserve -- 监听scrollView的滚动
+
+- (void)addTableViewVisibleRowObserve{
+    
+    @weakify(self);
+    
+    [_kvoCtr observe:_tableView keyPath:@"contentOffset" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew block:^(id  _Nullable observer, id  _Nonnull object, NSDictionary<NSString *,id> * _Nonnull change) {
+        
+        @strongify(self);
+        
+        @weakify(self);
+        
+        __block BOOL visible = NO;
+        
+        //遍历tableView的可见indexPaths
+        [_tableView.indexPathsForVisibleRows enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            @strongify(self);
+            
+            if([obj compare:_indexPath] == NSOrderedSame){
+                
+                *stop = YES;
+                
+                visible = YES;
+                
+            }
+            
+        }];
+        
+        //如果播放器在可见的indexPath内
+        if(visible){
+            
+            self.view.hidden = NO;
+            
+        }else{
+            
+            self.view.hidden = YES;
+            
+            if(self.isPlaying){
+                
+                [self pause];
+                
+                [self controlViewAppearMethod];
+            }
+        }
+        
+    }];
     
 }
 
@@ -473,6 +631,8 @@
 
 - (void)videoPlayEnd:(NSNotification *)notify{
     
+    [self pause];
+    
     @weakify(self);
     
     [self.avPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
@@ -484,6 +644,12 @@
         self.presentView.currentSecond = 0;
         
         self.bottomSlider.value = 0;
+        
+        if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+            
+            [self play];
+            
+        }
         
     }];
     
@@ -557,9 +723,13 @@
 
 - (void)setInterfaceOrientation:(UIInterfaceOrientation)orientation{
     
-    [self.rotationView removeFromSuperview];
+    if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        return;
+        
+    }
     
-//    NSLog(@"%f  %f", RotationWidth, RotationHeight);
+    [self.rotationView removeFromSuperview];
     
     switch (orientation) {
         case UIInterfaceOrientationPortrait:{
@@ -666,6 +836,12 @@
 
 - (void)controlViewAppearMethod{
     
+    if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        return;
+        
+    }
+    
     self.bottomSlider.hidden = YES;
     
     [UIApplication sharedApplication].statusBarHidden = NO;
@@ -693,6 +869,12 @@
 #pragma mark - controlViewAppearMethod -- 控制层隐藏
 
 - (void)controlViewDisappearMethod{
+    
+    if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        return;
+        
+    }
     
     @weakify(self);
     
@@ -758,24 +940,53 @@
 }
 
 #pragma mark - LDBottomControlViewDelegate
-//
-//- (void)controlView:(LDVideoBottomControlView *)controlView positionSliderLocationWithCurrentValue:(CGFloat)value{
-//
-//    _isHandleProgress = YES;
-//
-//    CMTime pointTime = CMTimeMake(value * [self currentPlayerItem].currentTime.timescale, [self currentPlayerItem].currentTime.timescale);
-//
-//    @weakify(self);
-//
-//    [[self currentPlayerItem] seekToTime:pointTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-//
-//        @strongify(self);
-//
-//        _isHandleProgress = NO;
-//
-//    }];
-//
-//}
+
+- (void)controlView:(LDVideoBottomControlView *)controlView positionSliderLocationWithCurrentValue:(CGFloat)value{
+    
+    //如果是在tableView上播放 并且是竖屏 禁止点击改变进度
+    if(self.playerStyle == LDVideoPlayerTableViewStyle && self.currentInterfaceOrientation == UIInterfaceOrientationPortrait){
+        return;
+    }
+    
+    _isHandleProgress = YES;
+    
+    [self presentViewAppearMethod];
+    
+    [self removeControlViewTimer];
+    
+    self.bottomControlView.currentSecond = value;
+    
+    self.presentView.currentSecond = value;
+    
+    self.bottomSlider.value = value;
+
+    CMTime pointTime = CMTimeMake(value * [self currentPlayerItem].currentTime.timescale, [self currentPlayerItem].currentTime.timescale);
+
+    @weakify(self);
+
+    [[self currentPlayerItem] seekToTime:pointTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+
+        @strongify(self);
+        
+        [self presentViewDissappearMethod];
+        
+        [self play];
+        
+        @weakify(self);
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            @strongify(self);
+            
+            _isHandleProgress = NO;
+            
+            [self addControlViewTimer];
+            
+        });
+
+    }];
+
+}
 
 - (void)controlView:(LDVideoBottomControlView *)controlView draggedPositionWithSliderValue:(CGFloat)value{
     
@@ -857,6 +1068,18 @@
     
 }
 
+#pragma mark - gestureRecognizer: shouldReceiveTouch： 是否接收次手势
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    
+    if(self.playerStyle != LDVideoPlayerNormalStyle && self.currentInterfaceOrientation == UIInterfaceOrientationPortrait && [NSStringFromClass([touch.view class]) isEqualToString:@"LDVideoPlayerView"]){
+        
+        return NO;
+        
+    }
+    
+    return YES;
+}
 
 #pragma mark - playViewPanGesture -- 水平方向更新video进度的手势/垂直方向更新亮度和音量
 
@@ -1058,6 +1281,13 @@
 
 - (void)playOrPauseGesture:(UIGestureRecognizer *)gesture{
     
+    //如果是短视频的类型，双击就是点赞
+    if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        return;
+        
+    }
+    
     _controlViewCount = 0;
     
     if(self.isPlaying){
@@ -1075,6 +1305,26 @@
 #pragma mark - playControlViewAppearOrDissappearGesture -- 点击屏幕管理controlView显示/隐藏
 
 - (void)playControlViewAppearOrDissappearGesture:(UIGestureRecognizer *)gesture{
+    
+    //如果是短视频的类型，单击就是暂停/播放
+    if(self.playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        if(self.isPlaying){
+            
+            [self pause];
+            
+            self.shortVideoPlayImg.hidden = NO;
+            
+        }else{
+            
+            [self play];
+            
+            self.shortVideoPlayImg.hidden = YES;
+            
+        }
+        
+        return;
+    }
     
     if(self.isControlAppear){
         
@@ -1127,8 +1377,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemPlaybackStalledNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
 }
 
@@ -1158,11 +1406,7 @@
 
 - (void)setMuted:(BOOL)muted{
     
-    if(self.isMuted != muted){
-        
-        self.avPlayer.muted = muted;
-        
-    }
+    _muted = muted;
     
 }
 
@@ -1184,17 +1428,25 @@
     
 }
 
-- (BOOL)isMuted{
-    
-    return self.avPlayer.isMuted;
-    
-}
-
 - (void)setAlwaysShowBackBtn:(BOOL)alwaysShowBackBtn{
     
     _alwaysShowBackBtn = alwaysShowBackBtn;
     
     self.topControlView.alwaysShowBackBtn = _alwaysShowBackBtn;
+    
+}
+
+- (void)setPlayerStyle:(LDVideoPlayerStyle)playerStyle{
+    
+    _playerStyle = playerStyle;
+    
+    if(_playerStyle == LDVideoPlayerShortVideoStyle){
+        
+        [UIApplication sharedApplication].statusBarHidden = YES;
+        
+        self.bottomSlider.hidden = NO;
+        
+    }
     
 }
 
@@ -1310,6 +1562,8 @@
         
         _bottomControlView = [[LDVideoBottomControlView alloc]init];
         
+//        _bottomControlView.backgroundColor = [UIColor whiteColor];
+        
         _bottomControlView.delegate = self;
         
     }
@@ -1344,6 +1598,8 @@
     if(!_panGestureRecognizer){
         
         _panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(playViewPanGesture:)];
+        
+        _panGestureRecognizer.delegate = self;
         
     }
     
@@ -1402,6 +1658,23 @@
     return _presentView;
 }
 
+- (UIImageView *)shortVideoPlayImg{
+    
+    if(!_shortVideoPlayImg){
+        
+        _shortVideoPlayImg = [[UIImageView alloc]init];
+        
+        _shortVideoPlayImg.alpha = 0.25;
+        
+        _shortVideoPlayImg.image = [UIImage imageNamed:@"shortVideoPlay"];
+        
+        _shortVideoPlayImg.hidden = YES;
+        
+    }
+    
+    return _shortVideoPlayImg;
+}
+
 - (UISlider *)bottomSlider{
     
     if(!_bottomSlider){
@@ -1420,7 +1693,7 @@
         
         _bottomSlider.maximumValue = 1;
         
-        _bottomSlider.value = 0.4;
+        _bottomSlider.value = 0;
         
         _bottomSlider.userInteractionEnabled = NO;
         
@@ -1460,6 +1733,20 @@
     return nil;
 }
 
+- (void)setStatus:(LDPlayerStatus)status{
+    
+    _status = status;
+    
+    if(_status == LDPlayerStatusReadyToPlay){
+        
+//        NSLog(@"准备播放  -------");
+//        
+//        [self play];
+        
+    }
+    
+}
+
 - (void)play{
     
     [self addControlViewTimer];
@@ -1491,10 +1778,14 @@
 //    [self.avPlayerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
 //    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
     if(self.avPlayer){
+        [self.avPlayerLayer removeFromSuperlayer];
         [self pause];
+        self.shortVideoPlayImg.hidden = YES;
+        self.assetURL = nil;
         self.avAsset = nil;
         self.avPlayerItem = nil;
         self.avPlayer = nil;
+        self.avPlayerLayer = nil;
         self.bottomControlView.totalSecond = 0;
         self.bottomControlView.currentSecond = 0;
         self.presentView.totalSecond = 0;
@@ -1503,6 +1794,34 @@
         self.bottomSlider.value = 0;
         [self.rotationView removeFromSuperview];
         [self.view removeFromSuperview];
+        self.rotationView = nil;
+        self.view = nil;
+    }
+    
+}
+
+- (void)reset{
+    
+    [self removeNotification];
+    [self removeTimeObserve];
+    [self removeControlViewTimer];
+    [self controlViewDisappearMethod];
+    
+    if(self.avPlayer){
+        [self.avPlayerLayer removeFromSuperlayer];
+        [self pause];
+        self.shortVideoPlayImg.hidden = YES;
+        self.assetURL = nil;
+        self.avAsset = nil;
+        self.avPlayerItem = nil;
+        self.avPlayer = nil;
+        self.avPlayerLayer = nil;
+        self.bottomControlView.totalSecond = 0;
+        self.bottomControlView.currentSecond = 0;
+        self.presentView.totalSecond = 0;
+        self.presentView.currentSecond = 0;
+        self.bottomSlider.maximumValue = 0;
+        self.bottomSlider.value = 0;
     }
     
 }

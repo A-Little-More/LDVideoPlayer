@@ -102,6 +102,14 @@
     
 }
 
+- (void)setTitle:(NSString *)title{
+    
+    _title = title;
+    
+    self.titleLabel.text = _title == nil ? @"" : _title;
+    
+}
+
 - (void)setAlwaysShowBackBtn:(BOOL)alwaysShowBackBtn{
     
     _alwaysShowBackBtn = alwaysShowBackBtn;

@@ -30,7 +30,7 @@
     
     self.viewControllerArray = @[@"HomeViewController",@"ShopViewController",@"CarViewController",@"MineViewController"];
     
-    self.tabBarTitleArray = @[@"首页",@"商城",@"购物车",@"我的"];
+    self.tabBarTitleArray = @[@"首页",@"腾讯小视频",@"抖音",@"我的"];
     
     self.tabBarImageArray = @[@"home",@"message",@"mycity",@"account"];
     

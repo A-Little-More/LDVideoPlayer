@@ -32,6 +32,12 @@ typedef NS_ENUM(NSInteger, LDPanGestureDirection) {
     LDPanGestureDirectionRight,
 };
 
+typedef NS_ENUM(NSInteger, LDVideoPlayerStyle) {
+    LDVideoPlayerNormalStyle, //正常视频
+    LDVideoPlayerTableViewStyle, //tableView上视频
+    LDVideoPlayerShortVideoStyle, //短视频
+};
+
 @interface LDVideoPlayerManager : NSObject
 
 /**
@@ -48,7 +54,6 @@ typedef NS_ENUM(NSInteger, LDPanGestureDirection) {
 
 @property (nonatomic, copy, readonly)NSString *url;
 
-
 /**
  *  videoLayer的填充方式
  */
@@ -57,7 +62,7 @@ typedef NS_ENUM(NSInteger, LDPanGestureDirection) {
 /**
  *  是否静音
  */
-@property (nonatomic, assign, getter=isMuted)BOOL muted;
+@property (nonatomic, assign, readwrite)BOOL muted;
 
 /**
  *  是否自动旋转 默认是NO
@@ -102,7 +107,34 @@ typedef NS_ENUM(NSInteger, LDPanGestureDirection) {
 /**
  *  播放器管理器的初始化方法
  */
-+ (instancetype)playerVideoUrl:(NSString *)url;
++ (instancetype)playerManager;
+
+/**
+ 设置video的title和url
+ 
+ @param title 标题
+ @param assetUrl 地址URL
+ */
+- (void)playWithTile:(NSString *)title avAssetUrl:(NSURL *)assetUrl;
+
+/**
+ 设置tableView上的视频播放参数
+ 
+ @param title 标题
+ @param assetUrl 地址URL
+ @param tableView 播放器所在的tableView
+ @param indexPath 播放器所在tableView的indexPath
+ @param parentView 播放器的父视图
+ */
+- (void)playWithTitle:(NSString *)title avAssetUrl:(NSURL *)assetUrl scrollView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath playerParentView:(UIView *)parentView;
+
+/**
+ 设置短视频类型的视频播放参数
+ 
+ @param assetUrl 地址URL
+ @param parentView 播放器的父视图
+ */
+- (void)playShortVideoStyleWithAvAssetUrl:(NSURL *)assetUrl playerParentView:(UIView *)parentView;
 
 /**
  *  开始播放
@@ -119,6 +151,10 @@ typedef NS_ENUM(NSInteger, LDPanGestureDirection) {
  */
 - (void)stop;
 
+/**
+ *  重置
+ */
+- (void)reset;
 
 /**
  *  点击返回按钮

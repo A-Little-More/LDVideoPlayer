@@ -20,26 +20,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor greenColor];
+    self.view.backgroundColor = [UIColor grayColor];
     
     self.navigationItem.title = @"视频播放";
     
-    self.playerManager = [LDVideoPlayerManager playerVideoUrl:videoUrl];
+    self.playerManager = [LDVideoPlayerManager playerManager];
+    
+    [self.playerManager playWithTile:@"titletitle/titletitle" avAssetUrl:[NSURL URLWithString:videoUrl]];
     
     [self.view addSubview:self.playerManager.view];
     
     [self.playerManager.view mas_makeConstraints:^(MASConstraintMaker *make) {
         
         make.left.mas_equalTo(self.view);
-        make.top.mas_equalTo(self.view).offset(0);
+        make.top.mas_equalTo(self.view);
         make.width.mas_equalTo(kScreenWidth);
-        make.height.mas_equalTo(170);
+        make.height.mas_equalTo(200);
         
     }];
     
     self.playerManager.mode = LDLayerVideoGravityResizeAspect;
     
-    self.playerManager.muted = NO;
+    self.playerManager.muted = YES;
     
     self.playerManager.shouldAutorotate = YES;
     
